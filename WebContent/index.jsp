@@ -68,7 +68,7 @@ body {
 
     <div class="container">
 
-      <form class="form-signin">
+      <form class="form-signin" action="LoginServlet" method="post">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">User Name</label>
         <input type="text" id="txtusername" name="txtusername" class="form-control" placeholder="Username" required autofocus>

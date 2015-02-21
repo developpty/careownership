@@ -59,6 +59,7 @@ public class MySqlConnOverSSH {
             System.out.println ("Database connection established");
             System.out.println("DONE");
             
+            /*
             stmt = conn.createStatement();
             System.out.println("stmt success!");
             sql = "select * from staff";
@@ -78,6 +79,7 @@ public class MySqlConnOverSSH {
                 System.out.println(first_name);
             }
             rs.close();
+            */
         }catch(Exception e){
             e.printStackTrace();
         }finally{
