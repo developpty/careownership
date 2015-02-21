@@ -8,6 +8,11 @@
 <script src="js/modernizr.js"></script>
 <script src="js/jquery-1.11.2.js"></script>
 <script src="js/jquery-ui.js"></script>
+<script src="js/angular.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.structure.css">
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.theme.css">
 
 <title>Insert title here</title>
 </head>
@@ -25,13 +30,26 @@
 		<div>City<input type="text"></input></div>
 		<div>County<input type="text"></input></div>
 		<div>State<input type="text"></input></div>
-		<div>Martial Status
-		<input type="radio" value="1"></input><br>
-		<input type="radio" value="2"></input><br>
-		<input type="radio" value="3"></input>
+		<div>Marital Status<br>
+		<input type="radio" name="martial" value="1">1</input><br>
+		<input type="radio" value="2">2</input><br>
+		<input type="radio" value="3">3</input>
 		</div>
-		<div>Gender<input type="text"></input></div>
-		<div>Highest Education Level<input type="checkbox"></input></div>
+		<div>Gender<br>
+		<input type="radio" value="male">Male</input>
+		<input type="radio" value="female">Female</input>
+		</div>
+		<div>Highest Education Level<br>
+			<select>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+			</select>
+		</div>
 		<div>SSN<input type="text"></input></div>
 		<div>SSN<input type="text"></input></div>
 		<div>SSN<input type="text"></input></div>
