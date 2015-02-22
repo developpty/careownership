@@ -8,7 +8,10 @@
 
 package careownership.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+
 import careownership.dto.*;
 import careownership.exceptions.*;
 
@@ -223,5 +226,7 @@ public interface MenteesDao
 	 * Returns all rows from the mentees table that match the specified arbitrary SQL statement
 	 */
 	public Mentees[] findByDynamicWhere(String sql, Object[] sqlParams) throws MenteesDaoException;
+	
+	public ArrayList<HashMap<String, String>>  findMentorMentees(int mentorID) throws MenteesDaoException;
 
 }

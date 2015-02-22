@@ -10,9 +10,12 @@ package careownership.jdbc;
 
 import careownership.dao.*;
 import careownership.factory.*;
+
 import java.util.Date;
+
 import careownership.dto.*;
 import careownership.exceptions.*;
+
 import java.sql.Connection;
 import java.util.Collection;
 import java.sql.PreparedStatement;
@@ -20,6 +23,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -59,6 +63,10 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 */
 	protected final String SQL_DELETE = "DELETE FROM " + getTableName() + " WHERE mentee_id = ?";
 
+	protected final String SQL_MENTOR_MENTEE = "SELECT concat(first_name,' ',last_name) as name , mentees.mentee_id  FROM mentees ,mentor_mentee  "
+			+ "WHERE mentees.mentee_id = mentor_mentee.mentee_id and mentor_mentee.mentor_id = ?";
+	
+	
 	/** 
 	 * Index of column mentee_id
 	 */
@@ -427,6 +435,59 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	{
 		Mentees ret[] = findByDynamicSelect( SQL_SELECT + " WHERE mentee_id = ?", new Object[] {  new Integer(menteeId) } );
 		return ret.length==0 ? null : ret[0];
+	}
+	
+	
+	/** 
+	 * Returns all rows from the mentees table that match the criteria 'mentee_id = :menteeId'.
+	 */
+	public ArrayList<HashMap<String, String>>  findMentorMentees(int mentorID) throws MenteesDaoException
+	{
+		// declare variables
+		final boolean isConnSupplied = (userConn != null);
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			// get the user-specified connection or get a connection from the ResourceManager
+			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
+		
+			// construct the SQL statement
+			final String SQL = SQL_MENTOR_MENTEE;
+		
+		
+			System.out.println( "Executing " + SQL );
+			// prepare statement
+			stmt = conn.prepareStatement( SQL );
+			stmt.setMaxRows( maxRows );
+		
+			stmt.setObject(1, mentorID);
+		
+		
+			rs = stmt.executeQuery();
+		
+			// fetch the results
+			ArrayList<HashMap<String, String>> resultList = new ArrayList();
+			while (rs.next()) {
+				HashMap<String, String> hash = new HashMap<String, String>();
+				hash.put(rs.getString(1), rs.getString(2));
+				resultList.add(hash);
+			}
+			return resultList;
+		}
+		catch (Exception _e) {
+			_e.printStackTrace();
+			throw new MenteesDaoException( "Exception: " + _e.getMessage(), _e );
+		}
+		finally {
+			ResourceManager.close(rs);
+			ResourceManager.close(stmt);
+			if (!isConnSupplied) {
+				ResourceManager.close(conn);
+			}
+		
+		}
 	}
 
 	/** 

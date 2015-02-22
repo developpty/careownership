@@ -31,13 +31,26 @@ public class MentorLogic extends MySqlConnOverSSH {
 	{		
 		Forms frm = new Forms();
 		
-		frm.setMenteeId(1);
-		frm.setMentorId(1);
+		frm.setMenteeId(Integer.parseInt(request.getParameter("select_apprentice")));
+		frm.setMentorId( mentorID);
+
+	    String myTime = request.getParameter("text_time");
+	    SimpleDateFormat sdf = new SimpleDateFormat("hh:mma");
+	    Date date = null;
+	    date = sdf.parse(myTime);
+	    frm.setMeetingTime(date);
+	    
+	    String formattedTime = sdf.format(date);
+	    System.out.println(formattedTime);
+	    
+	    
+		//text_time
 		
-		frm.setMeetingPlace(request.getParameter("txtmeetingplace"));
-		frm.setNextMeetingGoals(request.getParameter("txtnextgoals"));
-		frm.setTopicCovered(request.getParameter("txttopics"));
-		frm.setTopicCoveredOther(request.getParameter("txtobservations"));
+		frm.setMeetingNotes(request.getParameter("text_notes"));
+		frm.setMeetingPlace(request.getParameter("text_place"));
+		frm.setNextMeetingGoals(request.getParameter("text_nextgoals"));
+		frm.setTopicCovered(request.getParameter("text_topics_covered"));
+		frm.setTopicCoveredOther(request.getParameter("text_observations"));
 				
 		return frm;
 		
@@ -62,5 +75,31 @@ public class MentorLogic extends MySqlConnOverSSH {
 			return new Messages("Breakdown", false, e);
 		}
 	}
-	
+
+
+	public Messages getAllMeetings(int mentorID)
+	{
+		
+		try {
+			
+			FormsDao dao = FormsDaoFactory.create(openConnection());
+			Forms[] lista = dao.findByMentors(mentorID);
+			String outputTable = "";
+			for(Forms valor:lista)
+			{
+				outputTable+="<tr><td>"+valor.getFormId()+"</td>";
+				outputTable+="<td>"+valor.getMeetingPlace()+"</td>";
+				outputTable+="<td>"+valor.getMeetingNotes()+"</td>";
+				outputTable+="<td>"+valor.getNextMeetingGoals()+"</td></tr>";
+			}
+			
+			return new Messages("Succesful Retrieva;",true,outputTable,null);
+		
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Messages("Breakdown", false, e);
+		}
+	}
+
 }

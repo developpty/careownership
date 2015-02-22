@@ -59,6 +59,9 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 */
 	protected final String SQL_DELETE = "DELETE FROM " + getTableName() + " WHERE form_id = ?";
 
+	
+	
+	
 	/** 
 	 * Index of column form_id
 	 */

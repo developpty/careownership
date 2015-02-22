@@ -12,15 +12,34 @@
 <!-- Le styles -->
 <link href="assets/css/bootstrap.css" rel="stylesheet">
 <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="assets/css/jquery-ui.min.css" rel="stylesheet">
+<link href="assets/css/jquery.timepicker.css" rel="stylesheet">
 
-<!-- Latest compiled and minified JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="assets/js/modernizr.js"></script>
+<script src="assets/js/jquery-ui.js"></script>
+<script src="assets/js/jquery.timepicker.min.js"></script>
 
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+$(function() {
+	if (!Modernizr.inputtypes['time']) {
+		/*$('input[type=date]').datepicker({
+			dateFormat: 'yy-mm-dd'
+		});*/
+		
+		$('input[type=date]').timepicker();
+	}
+});
+
+
+</script>
 <!-- <style>
       body {
         padding-top: 30px;
@@ -93,7 +112,7 @@ body {
 						<li class="nav-header">Options</li>
 						<li class="active"><a class="active"
 							href="mettingsummaryform.jsp">Create Meeting Summary</a></li>
-						<li><a href="viewoldsummary.jsp">View Profile</a></li>
+						<li><a href="viewoldsummary.jsp">View Old Summaries</a></li>
 						<li><a href="viewfeedback.jsp">View Feedback</a></li>
 					</ul>
 				</div>
@@ -104,116 +123,108 @@ body {
 			<div class="span9">
 				<div class="row-fluid">
 					<div class="span9">
+						<%
+							if (request.getAttribute("successMessage") != null) {
+						%>
+						<div class="alert alert-success">
+							<a href="#" class="close" data-dismiss="alert">&times;</a>
+							<strong>Success!</strong><%=request.getAttribute("successMessage")%>
+						</div>
+						<%
+							} else if (request.getAttribute("accountList") != null) {
+						%>
+						<blockquote>
+							account name:
+							<%=request.getAttribute("accountList")%></blockquote>
+						<%
+							}
+						%>
+
 						<form class="form-horizontal" action="MentorServlet" method="post">
 							<fieldset>
-								<%
-									if (request.getAttribute("successMessage") != null) {
-								%>
-								<div class="alert alert-success">
-									<%=request.getAttribute("successMessage")%>
-								</div>
-								<%
-									} else if (request.getAttribute("accountList") != null) {
-								%>
-								<blockquote>
-									account name:
-									<%=request.getAttribute("accountList")%></blockquote>
-								<%
-									}
-								%>
+
+								<!-- Form Name -->
 								<legend>Meeting Summary</legend>
-								<div class="span4">
-									<div class="form-group">
-										<label>Meeting Date</label> <input name="txtmeeting"
-											type="date">
-									</div>
+								
+								<!-- Select Basic -->
+<div class="control-group">
+  <label class="control-label" for="selectbasic-1">Select Basic</label>
+  <div class="controls">
+    <select id="select_apprentice" name="select_apprentice" class="input-xlarge">
+      <%
+      	session = request.getSession(false);
+      	String options = (String)session.getAttribute("SessionMentorMentees");
+      %>
+		<%=options %>
+    </select>
+  </div>
+</div>
+								
+								<!-- Text input-->
+								<div class="control-group">
+									<label class="control-label" for="text_time">Time</label>
+									<div class="controls">
+										<input id="text_time" name="text_time" placeholder=""
+											class="input-xlarge" type="date">
 
-									<div class="form-group">
-										<label>Apprentice </label> <input name="txtapprentice"
-											type="text">
 									</div>
 								</div>
 
-								<div class="span4">
+								<!-- Text input-->
+								<div class="control-group">
+									<label class="control-label" for="text_place"> Place</label>
+									<div class="controls">
+										<input id="text_place" name="text_place"
+											placeholder="placeholder" class="input-xlarge" type="text">
 
-									<label>Meeting Place</label> <input name="txtmeetingplace"
-										type="text">
-									<!-- <label>Start Time </label> <input
-										name="tstart_time" type="time"> <label>Finish
-										Time </label> <input name="tend_time" type="time"> 
-										 -->
-									<div class="form-group">
-										<label>Total Time </label> <input name="txttotal_time"
-											type="text" value="This field is calculated"
-											readonly="readonly">
-									</div>
-
-
-								</div>
-
-
-								<!--  
-									<label>Mentor </label> <input
-									name="txtmentor" type="text">
-									-->
-								<div class="span8">
-									<div class="form-group">
-										<label>Pre-planned purpose of meeting: </label>
-										<textarea class="span9" name="txtoldpurpose"></textarea>
-									</div>
-									<div class="form-group">
-										<label>Topics discussed or activities performed: </label>
-										<textarea name="txttopics" class="span9"></textarea>
-									</div>
-									<div class="form-group">
-										<label>Accomplishments / Mentor observations: </label>
-										<textarea name="txtobservations" class="span9"></textarea>
-									</div>
-									<div class="form-group">
-										<label>Goals/Plan for next meeting: </label>
-										<textarea name="txtnextgoals" class="span9"></textarea>
-									</div>
-									<div class="form-group">
-
-										<label>Apprentice needs to accomplish by/bring to next
-											meeting:</label>
-										<textarea name="txtnext_accomplish" class="span9"></textarea>
-									</div>
-									<div class="form-group">
-										<label>Mentor needs to bring to next meeting: </label>
-										<textarea name="txtnext_mentor_bring" class="span9"></textarea>
 									</div>
 								</div>
 
-								<div class="span4">
-									<div class="form-group">
-										<label>Next Meeting Date</label><input name="txtdatenext"
-											type="date">
-									</div>
-								</div>
-								<div class="span4">
-									<div class="form-group">
-										<label>Next Meeting Time</label><input name="txttimenext"
-											type="time">
+								<!-- Textarea -->
+								<div class="control-group">
+									<label class="control-label" for="text_notes">Notes</label>
+									<div class="controls">
+										<textarea id="text_notes" name="text_notes">Notes</textarea>
 									</div>
 								</div>
 
-								<div class="span8">
-									<div class="form-group">
-										<label>Next Meeting Place </label> <input
-											name="txtmeetingnext" type="text">
+								<!-- Textarea -->
+								<div class="control-group">
+									<label class="control-label" for="text_topics_covered">Topics
+										Covered</label>
+									<div class="controls">
+										<textarea id="text_topics_covered" name="text_topics_covered">Topic Covered</textarea>
 									</div>
+								</div>
 
+								<!-- Textarea -->
+								<div class="control-group">
+									<label class="control-label" for="text_nextgoals">Next
+										Goals</label>
+									<div class="controls">
+										<textarea id="text_nextgoals" name="text_nextgoals">Next Goals</textarea>
+									</div>
 								</div>
-								<div class="span8">
-									    <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Save changes</button>
-    <button type="button" class="btn">Cancel</button>
-    </div>
+
+								<!-- Textarea -->
+								<div class="control-group">
+									<label class="control-label" for="text_observations">Observations</label>
+									<div class="controls">
+										<textarea id="text_observations" name="text_observations">Other Observations</textarea>
+									</div>
 								</div>
+
+								<!-- Button -->
+								<div class="control-group">
+									<label class="control-label" for="singlebutton-0"></label>
+									<div class="controls">
+										<button id="singlebutton-0" name="singlebutton-0"
+											class="btn btn-primary">Save</button>
+									</div>
+								</div>
+
 							</fieldset>
 						</form>
-
 
 					</div>
 					<!--/span-->

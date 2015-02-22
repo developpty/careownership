@@ -1,4 +1,4 @@
-package weblogic;
+package careownership.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -57,11 +57,24 @@ public class LoginServlet extends HttpServlet {
 	          HttpSession session = request.getSession(true);
 	          session.setAttribute("SessionMentor", (int)message.getReturnData());
 	          
-	    	  String url="/mettingsummaryform.jsp"; //relative url for display jsp page
-		      ServletContext sc = getServletContext();
+	          Messages msg = logic.getMentees((int)message.getReturnData());
+	          
+	          if(msg.isStatus())
+	          {
+	        	  System.out.println(msg.getReturnData());
+	        	  session.setAttribute("SessionMentorMentees", (String)msg.getReturnData());  
+	          }
+	          
+	          
+	          String url="mettingsummaryform.jsp"; //relative url for display jsp page
+		      
+	          response.sendRedirect(url);
+	          
+	          /*ServletContext sc = getServletContext();
 		      RequestDispatcher rd = sc.getRequestDispatcher(url);
 		      request.setAttribute("accountList", message );
-		      rd.forward(request, response);
+		      rd.forward(request, response);*/
+		      
 	      }else
 	      {
 	          request.setAttribute("erroMessage", message.getMessage() );
