@@ -8,7 +8,9 @@ public class Messages {
 	
 	
 	public Messages()
-	{}
+	{
+		mMessage="";
+	}
 	
 	public Messages(String message, boolean status, Exception ex)
 	{
@@ -26,19 +28,19 @@ public class Messages {
 		this.mException = mExeException;
 	}
 
-	public String getmMessage() {
+	public String getMessage() {
 		return mMessage;
 	}
 
-	public void setmMessage(String mMessage) {
+	public void setMessage(String mMessage) {
 		this.mMessage = mMessage;
 	}
 
-	public boolean ismStatus() {
+	public boolean isStatus() {
 		return mStatus;
 	}
 
-	public void setmStatus(boolean mStatus) {
+	public void setStatus(boolean mStatus) {
 		this.mStatus = mStatus;
 	}
 

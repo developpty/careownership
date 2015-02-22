@@ -104,9 +104,12 @@ body {
 			<div class="span9">
 				<div class="row-fluid">
 					<div class="span9">
-						<form class="form-horizontal">
+						<form class="form-horizontal" action="MentorServlet" method="post">
 							<fieldset>
-								<legend>Meeting Summary</legend>
+		        
+		        <blockquote>account name: <%= request.getAttribute("accountList")%></blockquote>
+		        
+ 						<legend>Meeting Summary</legend>
 								<label>Meeting Date</label><input name="txtmeeting" type="date">
 								<label>Apprentice </label> <input name="txtapprentice"
 									type="text"> <label>Mentor </label> <input
@@ -119,16 +122,16 @@ body {
 									purpose of meeting: </label>
 								<textarea name="txtoldpurpose"></textarea>
 								<label>Topics discussed or activities performed: </label>
-								<textarea name="txtoldpurpose" rows="5" cols="50"></textarea>
+								<textarea name="txttopics" rows="5" cols="50"></textarea>
 								<label>Accomplishments / Mentor observations: </label>
-								<textarea name="txtoldpurpose" rows="5" cols="50"></textarea>
+								<textarea name="txtobservations" rows="5" cols="50"></textarea>
 								<label>Goals/Plan for next meeting: </label>
-								<textarea name="txtoldpurpose" rows="5" cols="50"></textarea>
+								<textarea name="txtnextgoals" rows="5" cols="50"></textarea>
 								<label>Apprentice needs to accomplish by/bring to next
 									meeting:</label>
-								<textarea name="txtoldpurpose" rows="5" cols="50"></textarea>
+								<textarea name="txtnext_accomplish" rows="5" cols="50"></textarea>
 								<label>Mentor needs to bring to next meeting: </label>
-								<textarea name="txtoldpurpose" rows="5" cols="50"></textarea>
+								<textarea name="txtnext_mentor_bring" rows="5" cols="50"></textarea>
 
 								<span class="help-block">
 									<button type="submit" class="btn btn-primary btn-large">Submit</button>

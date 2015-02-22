@@ -68,8 +68,19 @@ body {
 
     <div class="container">
 
-      <form class="form-signin" action="LoginServlet" method="post">
+      <form class="form-signin" action="LoginServlet" method="post" autocomplete="off">
         <h2 class="form-signin-heading">Please sign in</h2>
+        <%
+
+	String error_msg=(String)request.getAttribute("erroMessage");
+    if(error_msg != null)
+    	if(error_msg.length() > 2)
+    	{%>
+        	<div class="alert alert-error">
+			<%= error_msg%>
+    		</div>
+       <% }
+%>
         <label for="inputEmail" class="sr-only">User Name</label>
         <input type="text" id="txtusername" name="txtusername" class="form-control" placeholder="Username" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
