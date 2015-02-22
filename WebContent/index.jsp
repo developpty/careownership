@@ -92,6 +92,7 @@ body {
     		</div>
        <% }
 %>
+	<img src="C:\CodeFest\images.jpg"/></br>
         <label for="inputEmail" class="sr-only">User Name</label>
         <input type="text" id="txtusername" name="txtusername" class="form-control" placeholder="Username" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
