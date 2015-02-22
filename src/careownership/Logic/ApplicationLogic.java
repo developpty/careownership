@@ -139,7 +139,12 @@ public class ApplicationLogic extends MySqlConnOverSSH {
 		mentee.setEmergencyContact(request.getParameter("txtemergencyContact"));
 		mentee.setEmergencyContactDescription(request.getParameter("txtemergencycontactdescription"));
 		mentee.setEmergencyContactInfo(request.getParameter("txtemergencycontactinfo"));
-		
+		mentee.setPretrainingCompleted("n");
+		mentee.setLtp1Completed("n");
+		mentee.setLtp2Completed("n");
+		mentee.setLtp3Completed("n");
+		mentee.setLtp4Completed("n");
+		mentee.setCurrentSaving(0);
 		
 		
 		return mentee;
