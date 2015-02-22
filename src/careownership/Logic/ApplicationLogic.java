@@ -19,20 +19,32 @@ import careownership.DB.MySqlConnOverSSH;
 import careownership.Utils.Messages;
 import careownership.dao.ApplicationDao;
 import careownership.dao.FormsDao;
+import careownership.dao.HouseholdInfoDao;
 import careownership.dao.InitialDebtDao;
 import careownership.dao.InitialEmploymentDao;
+import careownership.dao.MenteesDao;
+import careownership.dao.MentorMenteeDao;
 import careownership.dto.Application;
 import careownership.dto.ApplicationPk;
 import careownership.dto.Forms;
 import careownership.dto.FormsPk;
+import careownership.dto.HouseholdInfo;
+import careownership.dto.HouseholdInfoPk;
 import careownership.dto.InitialDebt;
 import careownership.dto.InitialDebtPk;
 import careownership.dto.InitialEmployment;
 import careownership.dto.InitialEmploymentPk;
+import careownership.dto.Mentees;
+import careownership.dto.MenteesPk;
+import careownership.dto.MentorMentee;
+import careownership.dto.MentorMenteePk;
 import careownership.factory.ApplicationDaoFactory;
 import careownership.factory.FormsDaoFactory;
+import careownership.factory.HouseholdInfoDaoFactory;
 import careownership.factory.InitialDebtDaoFactory;
 import careownership.factory.InitialEmploymentDaoFactory;
+import careownership.factory.MenteesDaoFactory;
+import careownership.factory.MentorMenteeDaoFactory;
 
 public class ApplicationLogic extends MySqlConnOverSSH {
 	public ApplicationLogic()
@@ -106,33 +118,102 @@ public class ApplicationLogic extends MySqlConnOverSSH {
 		return emp;
 	}
 	
-	public Messages doSaveApplicationForm(HttpServletRequest request, int menteeID)
-	{
+	private Mentees parseMentees(HttpServletRequest request) throws ParseException{
+		Mentees mentee = new Mentees();
+		DateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
 		
-		try {
-			ApplicationDao daoappl = ApplicationDaoFactory.create(openConnection());
-			Application appl = parseApplication(request,menteeID);
-			ApplicationPk pkAppl = daoappl.insert(appl);
-			
-			InitialDebtDao daodebt = InitialDebtDaoFactory.create(openConnection());
-			InitialDebt debt = parseInitialDebt(request,menteeID);
-			InitialDebtPk pkDebt = daodebt.insert(debt);
-			
-			InitialEmploymentDao daoemp = InitialEmploymentDaoFactory.create(openConnection());
-			InitialEmployment emp = parseInitialEmployment(request,menteeID);
-			InitialEmploymentPk pkEmp = daoemp.insert(emp);
-			
-			if(pkAppl.getMenteeId() > 0 && pkDebt.getInitialDebtId() > 0 && pkEmp.getInitialEmploymentId()>0)
-				return new Messages("Succesful Save",true, null);
-			else
-				return new Messages("Unsuccesful Attemp",true, null);
+		mentee.setFirstName(request.getParameter("txtfirstname"));
+		mentee.setLastName(request.getParameter("txtlastname"));
+		mentee.setMiddleInitial(request.getParameter("txtmiddleinitial"));
+		mentee.setAge(Integer.parseInt(request.getParameter("txtage")));
+		mentee.setAddress(request.getParameter("txtaddress"));
+		mentee.setApt(request.getParameter("txtapt"));
+		mentee.setCity(request.getParameter("txtcity"));
+		mentee.setState(request.getParameter("txtstate"));
+		mentee.setZipcode(request.getParameter("txtzipcode"));
+		mentee.setMaritalStatus(request.getParameter("txtmaritalstatus"));
+		mentee.setSex(request.getParameter("txtsex"));
+		mentee.setHighestEducationLevel(request.getParameter("txthighesteducationlevel"));
+		mentee.setNotes(request.getParameter("txtnotes"));
+		mentee.setBirthDate(format.parse(request.getParameter("txtbirthdate")));
+		mentee.setEmergencyContact(request.getParameter("txtemergencyContact"));
+		mentee.setEmergencyContactDescription(request.getParameter("txtemergencycontactdescription"));
+		mentee.setEmergencyContactInfo(request.getParameter("txtemergencycontactinfo"));
 		
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Messages("Breakdown", false, e);
-		}
+		
+		
+		return mentee;
+		
+		
+		
 	}
 	
+	private MentorMentee parseMentorMentee(int menteeID, int mentorID){
+		MentorMentee mm = new MentorMentee();
+		mm.setMenteeId(menteeID);
+		mm.setMentorId(mentorID);
+		
+		return mm;
+	}
+	
+	private HouseholdInfo parseHouseholdInfo(HttpServletRequest request, int menteeID) throws ParseException{
+		HouseholdInfo hhi = new HouseholdInfo();
+		DateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
+		
+		hhi.setHouseholdInfoName(request.getParameter("txthouseholdinfoname"));
+		hhi.setHouseholdInfoDateOfBirth(format.parse(request.getParameter("txthouseholdinfodateofbirth")));
+		hhi.setHouseholdInfoAdult(request.getParameter("txthouseholdinfoadult"));
+		hhi.setHouseholdInfoRelationship(request.getParameter("txthouseholdinforelationship"));
+		hhi.setHouseholdInfoNotes(request.getParameter("txthouseholdinfonotes"));
+		hhi.setMenteeId(menteeID);
+		
+		return hhi;
+	}
+	
+	public Messages doSaveApplicationForm(HttpServletRequest request, int mentorID){
+		
+		try{
+			MenteesDao daomentee = MenteesDaoFactory.create(openConnection());
+			Mentees mentee = parseMentees(request);
+			MenteesPk pkMentee = daomentee.insert(mentee);
+			int menteeID;
+			
+			if((menteeID = pkMentee.getMenteeId()) > 0){
+				MentorMenteeDao daomm = MentorMenteeDaoFactory.create(openConnection());
+				MentorMentee mm = parseMentorMentee(menteeID, mentorID);
+				MentorMenteePk pkMm = daomm.insert(mm);
+				
+				HouseholdInfoDao daohhi = HouseholdInfoDaoFactory.create(openConnection());
+				HouseholdInfo hhi = parseHouseholdInfo(request, menteeID);
+				HouseholdInfoPk pkhhi = daohhi.insert(hhi);
+				
+				ApplicationDao daoappl = ApplicationDaoFactory.create(openConnection());
+				Application appl = parseApplication(request,menteeID);
+				ApplicationPk pkAppl = daoappl.insert(appl);
+				
+				InitialDebtDao daodebt = InitialDebtDaoFactory.create(openConnection());
+				InitialDebt debt = parseInitialDebt(request,menteeID);
+				InitialDebtPk pkDebt = daodebt.insert(debt);
+				
+				InitialEmploymentDao daoemp = InitialEmploymentDaoFactory.create(openConnection());
+				InitialEmployment emp = parseInitialEmployment(request,menteeID);
+				InitialEmploymentPk pkEmp = daoemp.insert(emp);
+				
+				if(pkAppl.getMenteeId() > 0 && pkDebt.getInitialDebtId() > 0 && pkEmp.getInitialEmploymentId()>0 &&pkhhi.getHouseholdInfoId()>0)
+					return new Messages("Succesful Save",true, null);
+				else
+					return new Messages("Unsuccesful Attemp",true, null);				
+				
+			}
+			else
+				return new Messages("Unsuccesful Attemp",true, null);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new Messages("Breakdown", false, e);
+		}		
+	}
+
 	
 
 }
