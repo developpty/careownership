@@ -1,5 +1,6 @@
 package careownership.Logic;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -147,6 +148,7 @@ public class ApplicationLogic extends MySqlConnOverSSH {
 		mentee.setCurrentSaving(0);
 		
 		
+		
 		return mentee;
 		
 		
@@ -178,32 +180,33 @@ public class ApplicationLogic extends MySqlConnOverSSH {
 	public Messages doSaveApplicationForm(HttpServletRequest request, int mentorID){
 		
 		try{
-			MenteesDao daomentee = MenteesDaoFactory.create(openConnection());
+			Connection conn = openConnection();
+			MenteesDao daomentee = MenteesDaoFactory.create(conn);
 			Mentees mentee = parseMentees(request);
 			MenteesPk pkMentee = daomentee.insert(mentee);
 			int menteeID;
 			
 			if((menteeID = pkMentee.getMenteeId()) > 0){
-				MentorMenteeDao daomm = MentorMenteeDaoFactory.create(openConnection());
+				MentorMenteeDao daomm = MentorMenteeDaoFactory.create(conn);
 				MentorMentee mm = parseMentorMentee(menteeID, mentorID);
 				MentorMenteePk pkMm = daomm.insert(mm);
 				
-				HouseholdInfoDao daohhi = HouseholdInfoDaoFactory.create(openConnection());
+				HouseholdInfoDao daohhi = HouseholdInfoDaoFactory.create(conn);
 				HouseholdInfo hhi = parseHouseholdInfo(request, menteeID);
 				HouseholdInfoPk pkhhi = daohhi.insert(hhi);
 				
-				ApplicationDao daoappl = ApplicationDaoFactory.create(openConnection());
+				ApplicationDao daoappl = ApplicationDaoFactory.create(conn);
 				Application appl = parseApplication(request,menteeID);
 				ApplicationPk pkAppl = daoappl.insert(appl);
 				
-				InitialDebtDao daodebt = InitialDebtDaoFactory.create(openConnection());
+				InitialDebtDao daodebt = InitialDebtDaoFactory.create(conn);
 				InitialDebt debt = parseInitialDebt(request,menteeID);
 				InitialDebtPk pkDebt = daodebt.insert(debt);
 				
-				InitialEmploymentDao daoemp = InitialEmploymentDaoFactory.create(openConnection());
+				InitialEmploymentDao daoemp = InitialEmploymentDaoFactory.create(conn);
 				InitialEmployment emp = parseInitialEmployment(request,menteeID);
 				InitialEmploymentPk pkEmp = daoemp.insert(emp);
-				
+				closeConnection();
 				if(pkAppl.getMenteeId() > 0 && pkDebt.getInitialDebtId() > 0 && pkEmp.getInitialEmploymentId()>0 &&pkhhi.getHouseholdInfoId()>0)
 					return new Messages("Succesful Save",true, null);
 				else
@@ -215,6 +218,7 @@ public class ApplicationLogic extends MySqlConnOverSSH {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			
 			return new Messages("Breakdown", false, e);
 		}		
 	}
