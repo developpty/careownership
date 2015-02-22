@@ -5,6 +5,7 @@ public class Messages {
 	private Exception mException;
 	private String mMessage;
 	private boolean mStatus;
+	private Object returnData;
 	
 	
 	public Messages()
@@ -12,11 +13,19 @@ public class Messages {
 		mMessage="";
 	}
 	
-	public Messages(String message, boolean status, Exception ex)
+	public Messages(String message, boolean status,Exception ex)
 	{
 		mMessage = message;
 		mStatus = status;
 		mException = ex;
+	}
+	
+	public Messages(String message, boolean status,Object retData,Exception ex)
+	{
+		mMessage = message;
+		mStatus = status;
+		mException = ex;
+		setReturnData(retData);
 	}
 	
 	
@@ -50,6 +59,14 @@ public class Messages {
 		String errorValue= (mException==null)?"":mException.toString();
 		return "Messages [mExeException=" + errorValue + ", mMessage="
 				+ mMessage + ", mStatus=" + mStatus + "]";
+	}
+
+	public Object getReturnData() {
+		return returnData;
+	}
+
+	public void setReturnData(Object returnData) {
+		this.returnData = returnData;
 	}
 	
 	

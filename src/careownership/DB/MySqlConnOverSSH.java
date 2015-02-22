@@ -27,15 +27,17 @@ public class MySqlConnOverSSH {
         String password="11111111";
         String dbuserName = "root";
         String dbpassword = "EK2,MA>!9Z";
+        dbpassword = "root";
         String url = "jdbc:mysql://localhost:"+lport+"/careownership";
         String driverName="com.mysql.jdbc.Driver";
-        
+        url = "jdbc:mysql://localhost:"+rport+"/careownership";
 
+        /*
             //Set StrictHostKeyChecking property to no to avoid UnknownHostKey issue
             java.util.Properties config = new java.util.Properties(); 
             config.put("StrictHostKeyChecking", "no");
             JSch jsch = new JSch();
-            session=jsch.getSession(user, host, 22);
+            session=jsch.getSession(user, host, 20);
             session.setPassword(password);
             session.setConfig(config);
             session.connect();
@@ -43,6 +45,7 @@ public class MySqlConnOverSSH {
             int assinged_port=session.setPortForwardingL(lport, rhost, rport);
             System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
             System.out.println("Port Forwarded");
+            */
              
             //mysql database connectivity
             Class.forName(driverName).newInstance();

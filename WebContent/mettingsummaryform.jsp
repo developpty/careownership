@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,11 +90,11 @@ body {
 			<div class="span3">
 				<div class="well sidebar-nav">
 					<ul class="nav nav-list">
-						<li class="nav-header">Sidebar</li>
-						<li class="active"><a href="#">Link</a></li>
-						<li><a href="#">Create Meeting Summary</a></li>
-						<li><a href="#">View Profile</a></li>
-						<li><a href="#">Link</a></li>
+						<li class="nav-header">Options</li>
+						<li class="active"><a class="active"
+							href="mettingsummaryform.jsp">Create Meeting Summary</a></li>
+						<li><a href="viewoldsummary.jsp">View Profile</a></li>
+						<li><a href="viewfeedback.jsp">View Feedback</a></li>
 					</ul>
 				</div>
 				<!--/.well -->
@@ -106,36 +106,111 @@ body {
 					<div class="span9">
 						<form class="form-horizontal" action="MentorServlet" method="post">
 							<fieldset>
-		        
-		        <blockquote>account name: <%= request.getAttribute("accountList")%></blockquote>
-		        
- 						<legend>Meeting Summary</legend>
-								<label>Meeting Date</label><input name="txtmeeting" type="date">
-								<label>Apprentice </label> <input name="txtapprentice"
-									type="text"> <label>Mentor </label> <input
-									name="txtmentor" type="text"> <label>Meeting
-									Place</label> <input name="txtmeetingplace" type="text"> <label>Start
-									Time </label> <input name="tstart_time" type="time"> <label>Finish
-									Time </label> <input name="tend_time" type="time"> <label>Total
-									Time </label> <input name="txttotal_time" type="text"
-									value="This field is calculated" readonly="readonly"> <label>Pre-planned
-									purpose of meeting: </label>
-								<textarea name="txtoldpurpose"></textarea>
-								<label>Topics discussed or activities performed: </label>
-								<textarea name="txttopics" rows="5" cols="50"></textarea>
-								<label>Accomplishments / Mentor observations: </label>
-								<textarea name="txtobservations" rows="5" cols="50"></textarea>
-								<label>Goals/Plan for next meeting: </label>
-								<textarea name="txtnextgoals" rows="5" cols="50"></textarea>
-								<label>Apprentice needs to accomplish by/bring to next
-									meeting:</label>
-								<textarea name="txtnext_accomplish" rows="5" cols="50"></textarea>
-								<label>Mentor needs to bring to next meeting: </label>
-								<textarea name="txtnext_mentor_bring" rows="5" cols="50"></textarea>
+								<%
+									if (request.getAttribute("successMessage") != null) {
+								%>
+								<div class="alert alert-success">
+									<%=request.getAttribute("successMessage")%>
+								</div>
+								<%
+									} else if (request.getAttribute("accountList") != null) {
+								%>
+								<blockquote>
+									account name:
+									<%=request.getAttribute("accountList")%></blockquote>
+								<%
+									}
+								%>
+								<legend>Meeting Summary</legend>
+								<div class="span4">
+									<div class="form-group">
+										<label>Meeting Date</label> <input name="txtmeeting"
+											type="date">
+									</div>
 
-								<span class="help-block">
-									<button type="submit" class="btn btn-primary btn-large">Submit</button>
-								</span>
+									<div class="form-group">
+										<label>Apprentice </label> <input name="txtapprentice"
+											type="text">
+									</div>
+								</div>
+
+								<div class="span4">
+
+									<label>Meeting Place</label> <input name="txtmeetingplace"
+										type="text">
+									<!-- <label>Start Time </label> <input
+										name="tstart_time" type="time"> <label>Finish
+										Time </label> <input name="tend_time" type="time"> 
+										 -->
+									<div class="form-group">
+										<label>Total Time </label> <input name="txttotal_time"
+											type="text" value="This field is calculated"
+											readonly="readonly">
+									</div>
+
+
+								</div>
+
+
+								<!--  
+									<label>Mentor </label> <input
+									name="txtmentor" type="text">
+									-->
+								<div class="span8">
+									<div class="form-group">
+										<label>Pre-planned purpose of meeting: </label>
+										<textarea class="span9" name="txtoldpurpose"></textarea>
+									</div>
+									<div class="form-group">
+										<label>Topics discussed or activities performed: </label>
+										<textarea name="txttopics" class="span9"></textarea>
+									</div>
+									<div class="form-group">
+										<label>Accomplishments / Mentor observations: </label>
+										<textarea name="txtobservations" class="span9"></textarea>
+									</div>
+									<div class="form-group">
+										<label>Goals/Plan for next meeting: </label>
+										<textarea name="txtnextgoals" class="span9"></textarea>
+									</div>
+									<div class="form-group">
+
+										<label>Apprentice needs to accomplish by/bring to next
+											meeting:</label>
+										<textarea name="txtnext_accomplish" class="span9"></textarea>
+									</div>
+									<div class="form-group">
+										<label>Mentor needs to bring to next meeting: </label>
+										<textarea name="txtnext_mentor_bring" class="span9"></textarea>
+									</div>
+								</div>
+
+								<div class="span4">
+									<div class="form-group">
+										<label>Next Meeting Date</label><input name="txtdatenext"
+											type="date">
+									</div>
+								</div>
+								<div class="span4">
+									<div class="form-group">
+										<label>Next Meeting Time</label><input name="txttimenext"
+											type="time">
+									</div>
+								</div>
+
+								<div class="span8">
+									<div class="form-group">
+										<label>Next Meeting Place </label> <input
+											name="txtmeetingnext" type="text">
+									</div>
+
+								</div>
+								<div class="span8">
+									    <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Save changes</button>
+    <button type="button" class="btn">Cancel</button>
+    </div>
+								</div>
 							</fieldset>
 						</form>
 

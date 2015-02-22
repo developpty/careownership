@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import careownership.Logic.LoginLogic;
 import careownership.Utils.Messages;
@@ -48,10 +49,14 @@ public class LoginServlet extends HttpServlet {
 	      
 	      String uname=request.getParameter("txtusername");  
 	      String pwd=request.getParameter("txtpassword");  
-	      Messages message = logic.dologinStaff(uname, pwd);
+	      Messages message = logic.dologinMentors(uname, pwd);
 	      
 	      if(message.isStatus())
 	      {
+	    	  // Create a session object if it is already not  created.
+	          HttpSession session = request.getSession(true);
+	          session.setAttribute("SessionMentor", (int)message.getReturnData());
+	          
 	    	  String url="/mettingsummaryform.jsp"; //relative url for display jsp page
 		      ServletContext sc = getServletContext();
 		      RequestDispatcher rd = sc.getRequestDispatcher(url);
