@@ -16,6 +16,67 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `debt_change`
+--
+
+DROP TABLE IF EXISTS `debt_change`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `debt_change` (
+  `debt_change_id` int(11) NOT NULL AUTO_INCREMENT,
+  `current_total_debt` int(11) DEFAULT NULL,
+  `current_debt_type` varchar(45) DEFAULT NULL,
+  `current_debt_description` varchar(45) DEFAULT NULL,
+  `current_debt_date` date DEFAULT NULL,
+  `mentee_id` int(11) NOT NULL,
+  PRIMARY KEY (`debt_change_id`),
+  KEY `debt_mentee_idx` (`mentee_id`),
+  CONSTRAINT `debt_mentee` FOREIGN KEY (`mentee_id`) REFERENCES `mentees` (`mentee_id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `debt_change`
+--
+
+LOCK TABLES `debt_change` WRITE;
+/*!40000 ALTER TABLE `debt_change` DISABLE KEYS */;
+INSERT INTO `debt_change` VALUES (1,789,'student','sadawq weqe das asd','2014-08-09',1),(2,441,'payday','asd adw wqewq','2015-01-01',1),(3,558,'auto','asdi weqe opad ','2015-02-01',2);
+/*!40000 ALTER TABLE `debt_change` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `employment_change`
+--
+
+DROP TABLE IF EXISTS `employment_change`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `employment_change` (
+  `employment_change_id` int(11) NOT NULL AUTO_INCREMENT,
+  `current_position` varchar(45) DEFAULT NULL,
+  `current_monthly_earnings` int(11) DEFAULT NULL,
+  `current_employer` varchar(45) DEFAULT NULL,
+  `date_of_change` date DEFAULT NULL,
+  `current_notes` varchar(500) DEFAULT NULL,
+  `mentee_id` int(11) NOT NULL,
+  PRIMARY KEY (`employment_change_id`),
+  KEY `employment_mentee_idx` (`mentee_id`),
+  CONSTRAINT `employment_mentee` FOREIGN KEY (`mentee_id`) REFERENCES `mentees` (`mentee_id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `employment_change`
+--
+
+LOCK TABLES `employment_change` WRITE;
+/*!40000 ALTER TABLE `employment_change` DISABLE KEYS */;
+INSERT INTO `employment_change` VALUES (1,'staff',3000,'dasdas','2014-01-02','sdd wqeqwe',1),(2,'manager',6000,'qweqwe','2013-03-04','sdd errr ggg',2),(3,'president',10000,'wqewsad','2015-01-01','sdsdw',2);
+/*!40000 ALTER TABLE `employment_change` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `forms`
 --
 
@@ -28,18 +89,15 @@ CREATE TABLE `forms` (
   `mentee_id` int(11) NOT NULL,
   `meeting_time` datetime DEFAULT NULL,
   `meeting_place` varchar(45) DEFAULT NULL,
-  `ending_time` datetime DEFAULT NULL,
-  `pre_planned_purpose` varchar(500) DEFAULT NULL,
-  `topic_activities` varchar(500) DEFAULT NULL,
-  `accomplishment` varchar(500) DEFAULT NULL,
-  `goals_nextmeeting` varchar(500) DEFAULT NULL,
-  `mentees_next_meeting` varchar(500) DEFAULT NULL,
-  `mentors_next_meeting` varchar(500) DEFAULT NULL,
-  `time_next_meeting` datetime DEFAULT NULL,
-  `place_next_meeting` varchar(45) DEFAULT NULL,
+  `meeting_notes` varchar(500) DEFAULT NULL,
+  `next_meeting_goals` varchar(500) DEFAULT NULL,
+  `topic_covered` varchar(500) DEFAULT NULL,
+  `topic_covered_other` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`form_id`),
   KEY `mentor_id_fkey_idx` (`mentor_id`,`mentee_id`),
-  CONSTRAINT `mentor_id_fkey` FOREIGN KEY (`mentor_id`, `mentee_id`) REFERENCES `mentor_mentee` (`mentor_id`, `mentee_id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  KEY `mentee_id_idx` (`mentee_id`),
+  CONSTRAINT `mentee_id` FOREIGN KEY (`mentee_id`) REFERENCES `mentees` (`mentee_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `mentor_id` FOREIGN KEY (`mentor_id`) REFERENCES `mentors` (`mentor_id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -49,7 +107,6 @@ CREATE TABLE `forms` (
 
 LOCK TABLES `forms` WRITE;
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,1,1,'2015-02-20 16:10:45','Library','2015-02-20 16:10:00','asdi daskldj sadkljasdw sadjkjla cxue uqewl sdlxz weq','1.dsaodaoho jjo 2. dasdja','ashdas dashw sjdkx weqoe pipo','odaja qweqw eff gfgr','dasd ewqe jty cbv iioyu','eqwe tretr dasdas cbv uuy','2015-02-23 16:10:45','Apartment'),(2,3,1,'2015-02-15 16:10:45','Apartment','2015-02-15 16:00:00','ashd dwqhew qwe czx ht','1.dw cc tretu uy','das xcz rty ii fc','asda weqe','hh ytuyt iul bvcb','zc qwe ytuyt opo','2015-02-26 15:10:45','Library');
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,18 +118,24 @@ DROP TABLE IF EXISTS `mentees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mentees` (
-  `mentee_id` int(11) NOT NULL,
+  `mentee_id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(45) NOT NULL,
   `last_name` varchar(45) NOT NULL,
-  `SSN` varchar(45) NOT NULL,
-  `sex` varchar(10) DEFAULT NULL,
-  `age` int(11) DEFAULT NULL,
-  `maritial_status` varchar(45) DEFAULT NULL,
-  `address` varchar(100) DEFAULT NULL,
-  `zipcode` varchar(10) DEFAULT NULL,
-  `highest_education_level` varchar(45) DEFAULT NULL,
+  `pretraining_completed` varchar(1) DEFAULT NULL,
+  `pretraining_date_complete` date DEFAULT NULL,
+  `ltp1_completed` varchar(1) DEFAULT NULL,
+  `ltp1_date_complete` date DEFAULT NULL,
+  `ltp2_completed` varchar(1) DEFAULT NULL,
+  `ltp2_date_complete` date DEFAULT NULL,
+  `ltp3_completed` varchar(1) DEFAULT NULL,
+  `ltp3_date_complete` date DEFAULT NULL,
+  `ltp4_completed` varchar(1) DEFAULT NULL,
+  `ltp4_date_complete` date DEFAULT NULL,
+  `other_goals` varchar(200) DEFAULT NULL,
+  `current_saving` int(11) DEFAULT NULL,
+  `notes` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`mentee_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +144,7 @@ CREATE TABLE `mentees` (
 
 LOCK TABLES `mentees` WRITE;
 /*!40000 ALTER TABLE `mentees` DISABLE KEYS */;
-INSERT INTO `mentees` VALUES (1,'Steel','City','5899641','male',32,'married','4716 Ellsworth Ave','15213','high school'),(2,'Carnegie','Library','895774','female',25,'single','4563 dawson St','18974','Undergraduate'),(3,'Book','Window','89554','male',27,'single','8947 forbes Ave','14987','master');
+INSERT INTO `mentees` VALUES (1,'Sprite','Books','y','2014-02-21','y','2014-08-09','n',NULL,'n',NULL,'n',NULL,'no',3455,'weqe qewqe'),(2,'Windows','Mico','n',NULL,'n',NULL,'n',NULL,'n',NULL,'n',NULL,'qwe das tyrt',8997,'hahahaha');
 /*!40000 ALTER TABLE `mentees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,8 +160,8 @@ CREATE TABLE `mentor_mentee` (
   `mentee_id` int(11) NOT NULL,
   PRIMARY KEY (`mentor_id`,`mentee_id`),
   KEY `mentee_id_ref_idx` (`mentee_id`),
-  CONSTRAINT `mentee_id_ref` FOREIGN KEY (`mentee_id`) REFERENCES `mentees` (`mentee_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `mentor_id_ref` FOREIGN KEY (`mentor_id`) REFERENCES `mentors` (`mentor_id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `mentor_id_ref` FOREIGN KEY (`mentor_id`) REFERENCES `mentors` (`mentor_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `mentee_id_ref` FOREIGN KEY (`mentee_id`) REFERENCES `mentees` (`mentee_id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -108,7 +171,7 @@ CREATE TABLE `mentor_mentee` (
 
 LOCK TABLES `mentor_mentee` WRITE;
 /*!40000 ALTER TABLE `mentor_mentee` DISABLE KEYS */;
-INSERT INTO `mentor_mentee` VALUES (1,1),(3,1),(1,2),(2,2),(2,3),(3,3);
+INSERT INTO `mentor_mentee` VALUES (1,1),(2,2);
 /*!40000 ALTER TABLE `mentor_mentee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +184,22 @@ DROP TABLE IF EXISTS `mentors`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mentors` (
   `mentor_id` int(11) NOT NULL AUTO_INCREMENT,
-  `full_name` varchar(45) NOT NULL,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `middle_initial` varchar(45) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `apt#` varchar(10) DEFAULT NULL,
+  `city` varchar(20) DEFAULT NULL,
+  `state` varchar(45) DEFAULT NULL,
+  `zipcode` varchar(45) DEFAULT NULL,
+  `sex` varchar(1) DEFAULT NULL,
+  `highest_education_level` varchar(45) DEFAULT NULL,
+  `notes` varchar(200) DEFAULT NULL,
+  `birth_date` date DEFAULT NULL,
+  `emergency_contact` varchar(45) DEFAULT NULL,
+  `emergency_contact_description` varchar(100) DEFAULT NULL,
+  `emergency_contact_contact_info` varchar(100) DEFAULT NULL,
   `login_name` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   PRIMARY KEY (`mentor_id`)
@@ -134,7 +212,7 @@ CREATE TABLE `mentors` (
 
 LOCK TABLES `mentors` WRITE;
 /*!40000 ALTER TABLE `mentors` DISABLE KEYS */;
-INSERT INTO `mentors` VALUES (1,'Sprite Lenovo','sprite','123'),(2,'Coffe Bead','coffe','123'),(3,'Sanwich Board','sanwich','123');
+INSERT INTO `mentors` VALUES (1,'Lebron','James',NULL,25,'XXX St','18','Cleveland','OH','12345','M','high school','','1990-01-01','655478','hdasd wqueq wuasdas','dasdwq qweqw','james','123'),(2,'Kobe','Bryant',NULL,30,'XXX Ave','19','Los Angels','CA','54321','M','high school',NULL,'1985-01-01','895576','dasdwqdaxc dwq qw','as daswqeq','kobe','123');
 /*!40000 ALTER TABLE `mentors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,7 +238,7 @@ CREATE TABLE `staff` (
 
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES (1,'Lebron James','james','123'),(2,'Kobe Byrant','kobe','123');
+INSERT INTO `staff` VALUES (1,'LL James','james','123'),(2,'Kobe Byrant','kobe','123');
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -173,4 +251,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-21 17:10:17
+-- Dump completed on 2015-02-21 21:24:36
