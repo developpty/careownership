@@ -134,7 +134,7 @@
 								for="landlord_graduate_i2">No</label>
 						</div></td>
 					<td><input id="probation_end_date" name="probation_end_date"
-						type="text" class="datepicker"></input></td>
+						type="date" class="datepicker"></input></td>
 				</tr>
 
 				<tr>

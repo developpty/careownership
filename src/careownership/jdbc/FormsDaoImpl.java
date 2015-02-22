@@ -359,6 +359,16 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	{
 		return findByDynamicSelect( SQL_SELECT + " ORDER BY form_id", null );
 	}
+	
+	/** 
+	 * Returns all rows from the forms table that match the criteria ''.
+	 */
+	public Forms[] findAllOrderBy(String orderby) throws FormsDaoException
+	{
+		return findByDynamicSelect( SQL_SELECT + " ORDER BY "+orderby, null );
+	}
+	
+	
 
 	/** 
 	 * Returns all rows from the forms table that match the criteria 'mentee_id = :menteeId'.

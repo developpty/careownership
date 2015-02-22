@@ -31,7 +31,7 @@ public class Logout extends HttpServlet {
 		// TODO Auto-generated method stub
 		HttpSession session=request.getSession();  
         session.invalidate();  
-        request.getRequestDispatcher("index.jsp").include(request, response);
+        response.sendRedirect("index.jsp");
 	}
 
 	/**
@@ -41,7 +41,8 @@ public class Logout extends HttpServlet {
 		// TODO Auto-generated method stub
 		HttpSession session=request.getSession();  
         session.invalidate();
-        request.getRequestDispatcher("index.jsp").include(request, response); 
+        response.sendRedirect("index.jsp");
+        //request.getRequestDispatcher("index.jsp").include(request, response); 
 	}
 
 }

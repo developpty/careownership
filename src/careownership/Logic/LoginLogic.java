@@ -30,18 +30,20 @@ public class LoginLogic extends MySqlConnOverSSH {
 		
 		try {
 		    Statement stmt = openConnection().createStatement();
-		    ResultSet rs = stmt.executeQuery( "SELECT password FROM staff WHERE login_name = '"+username+"'" );
+		    ResultSet rs = stmt.executeQuery( "SELECT password,staff_id FROM staff WHERE login_name = '"+username+"'" );
 		    String dbpwd = "";
+		    int staffID= 0;
 		    while ( rs.next() ) {
 		    	//int numColumns = rs.getMetaData().getColumnCount();
 		    	dbpwd = rs.getString("password");
+		    	staffID = rs.getInt("staff_id");
 		    }
 		    rs.close();
 		    stmt.close(); 
 		    
 		    if(dbpwd.equalsIgnoreCase(password))
 		    {
-		    	return new Messages("Everything OK", true, null);
+		    	return new Messages("Everything OK", true,staffID, null);
 		    }else
 		    {
 		    	return new Messages("Username or Password is incorrect", false, null);

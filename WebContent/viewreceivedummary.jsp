@@ -1,3 +1,4 @@
+<%@page import="careownership.Logic.StaffLogic"%>
 <%@page import="careownership.Logic.MentorLogic"%>
 <%@page import="careownership.Utils.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -6,7 +7,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Meeting Summary</title>
+<title>Received Summaries</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -121,10 +122,9 @@ body {
 				<div class="well sidebar-nav">
 					<ul class="nav nav-list">
 						<li class="nav-header">Options</li>
-						<li><a class="active"
-							href="mettingsummaryform.jsp">Create Meeting Summary</a></li>
-						<li class="active"><a href="viewoldsummary.jsp">View Old Summaries</a></li>
-						<li><a href="viewfeedback.jsp">View Feedback</a></li>
+						<li class="active"><a href="viewreceivedummary.jsp">View Received Summaries</a></li>
+						<li><a href="trainee_registration.jsp">Trainee Registration</a></li>
+						<li><a href="#">Todo</a></li>
 					</ul>
 				</div>
 				<!--/.well -->
@@ -156,21 +156,22 @@ body {
         <tbody>
             <%
         	session=request.getSession(false);  
-			int mentorID = 0;
+			int staffID = 0;
 			if(session!=null)
 			{
-				Object obj = session.getAttribute("SessionMentor");
+				Object obj = session.getAttribute("SessionStaff");
 				if(obj ==null)
 					response.sendRedirect("index.jsp");
 				else
 				{
-			    	mentorID=Integer.parseInt(session.getAttribute("SessionMentor").toString());  
-			    	MentorLogic logic = new MentorLogic();
-			    	Messages message = logic.getAllMeetings(mentorID);			
+					staffID=Integer.parseInt(session.getAttribute("SessionStaff").toString());  
+					StaffLogic logic = new StaffLogic();
+					Messages message = logic.getAllMeetings();			
 				      if(message.isStatus())
 				      {%>
 				    	 <%= message.getReturnData() %>
 				      <%}
+					
 				}
 			}else
 			{

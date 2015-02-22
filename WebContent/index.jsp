@@ -67,9 +67,20 @@ body {
 <body>
 
     <div class="container">
+        <%
+        	session=request.getSession(false);  
+			int staffID = 0;
+			if(session!=null)
+			{
+				Object obj = session.getAttribute("SessionMentor");
+				if(obj !=null)
+					response.sendRedirect("mettingsummaryform.jsp");
+				
+			}                        
+            %>
 
-      <form class="form-signin" action="LoginServlet" method="post" autocomplete="off">
-        <h2 class="form-signin-heading">Please sign in</h2>
+      <form class="form-signin" action="LoginServlet?action=mentor" method="post" autocomplete="off">
+        <h2 class="form-signin-heading">Mentor SignIn</h2>
         <%
 
 	String error_msg=(String)request.getAttribute("erroMessage");

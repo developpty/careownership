@@ -9,6 +9,7 @@
 package careownership.dao;
 
 import java.util.Date;
+
 import careownership.dto.*;
 import careownership.exceptions.*;
 
@@ -169,4 +170,8 @@ public interface FormsDao
 	 */
 	public Forms[] findByDynamicWhere(String sql, Object[] sqlParams) throws FormsDaoException;
 
+	/** 
+	 * Returns all rows from the forms table that match the criteria ''.
+	 */
+	public Forms[] findAllOrderBy(String orderby) throws FormsDaoException;
 }

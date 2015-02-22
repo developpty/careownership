@@ -78,7 +78,25 @@ body {
 </head>
 
 <body>
-
+    <%
+    try{
+       	session=request.getSession(false);  
+    			if(session!=null)
+    			{
+    				Object obj = session.getAttribute("SessionMentor");
+    				if(obj ==null)
+    					response.sendRedirect("index.jsp");
+    			    
+    			}else
+    			{
+    				response.sendRedirect("index.jsp");
+    			}
+    }catch(Exception e)
+    {
+    	
+    }
+                             
+            %>
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container-fluid">
@@ -90,7 +108,7 @@ body {
 				<a class="brand" href="#">Project name</a>
 				<div class="nav-collapse collapse">
 					<p class="navbar-text pull-right">
-						Logged in as <a href="#" class="navbar-link">Username</a>
+						<a href="Logout" class="navbar-link">Logout</a>
 					</p>
 					<ul class="nav">
 						<li class="active"><a href="#">Home</a></li>

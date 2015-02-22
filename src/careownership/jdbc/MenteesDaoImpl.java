@@ -51,7 +51,7 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	/** 
 	 * SQL INSERT statement for this table
 	 */
-	protected final String SQL_INSERT = "INSERT INTO " + getTableName() + " ( mentee_id, first_name, last_name, sex, age, address, zipcode, highest_education_level, pretraining_completed, pretraining_date_complete, ltp1_completed, ltp1_date_complete, ltp2_completed, ltp2_date_complete, ltp3_completed, ltp3_date_complete, ltp4_completed, ltp4_date_complete, other_goals, current_saving, notes, middle_initial, apt#, city, state, marital_status, birth_date, emergency_contact, emergency_contact_description, emergency_contact_info ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+	protected String SQL_INSERT = "INSERT INTO " + getTableName() + " ( mentee_id, first_name, last_name, sex, age, address, zipcode, highest_education_level, pretraining_completed, pretraining_date_complete, ltp1_completed, ltp1_date_complete, ltp2_completed, ltp2_date_complete, ltp3_completed, ltp3_date_complete, ltp4_completed, ltp4_date_complete, other_goals, current_saving, notes, middle_initial, apt#, city, state, marital_status, birth_date, emergency_contact, emergency_contact_description, emergency_contact_info ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
 	/** 
 	 * SQL UPDATE statement for this table
@@ -243,23 +243,19 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 			// get the user-specified connection or get a connection from the ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
 		
-			stmt = conn.prepareStatement( SQL_INSERT );
+			SQL_INSERT = "INSERT INTO " + getTableName() + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+
+			
+			stmt = conn.prepareStatement( SQL_INSERT);
 			int index = 1;
+			System.err.println(stmt.getParameterMetaData().getParameterCount());
+			
 			stmt.setInt( index++, dto.getMenteeId() );
 			stmt.setString( index++, dto.getFirstName() );
-			stmt.setString( index++, dto.getLastName() );
-			stmt.setString( index++, dto.getSex() );
-			if (dto.isAgeNull()) {
-				stmt.setNull( index++, java.sql.Types.INTEGER );
-			} else {
-				stmt.setInt( index++, dto.getAge() );
-			}
-		
-			stmt.setString( index++, dto.getAddress() );
-			stmt.setString( index++, dto.getZipcode() );
-			stmt.setString( index++, dto.getHighestEducationLevel() );
+			stmt.setString( index++, dto.getLastName() ); 
 			stmt.setString( index++, dto.getPretrainingCompleted() );
 			stmt.setDate(index++, dto.getPretrainingDateComplete()==null ? null : new java.sql.Date( dto.getPretrainingDateComplete().getTime() ) );
+			
 			stmt.setString( index++, dto.getLtp1Completed() );
 			stmt.setDate(index++, dto.getLtp1DateComplete()==null ? null : new java.sql.Date( dto.getLtp1DateComplete().getTime() ) );
 			stmt.setString( index++, dto.getLtp2Completed() );
@@ -268,19 +264,29 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 			stmt.setDate(index++, dto.getLtp3DateComplete()==null ? null : new java.sql.Date( dto.getLtp3DateComplete().getTime() ) );
 			stmt.setString( index++, dto.getLtp4Completed() );
 			stmt.setDate(index++, dto.getLtp4DateComplete()==null ? null : new java.sql.Date( dto.getLtp4DateComplete().getTime() ) );
+			
 			stmt.setString( index++, dto.getOtherGoals() );
 			if (dto.isCurrentSavingNull()) {
 				stmt.setNull( index++, java.sql.Types.INTEGER );
 			} else {
 				stmt.setInt( index++, dto.getCurrentSaving() );
 			}
-		
+			
 			stmt.setString( index++, dto.getNotes() );
 			stmt.setString( index++, dto.getMiddleInitial() );
+			if (dto.isAgeNull()) {
+				stmt.setNull( index++, java.sql.Types.INTEGER );
+			} else {
+				stmt.setInt( index++, dto.getAge() );
+			}
+			stmt.setString( index++, dto.getAddress() );
 			stmt.setString( index++, dto.getApt() );
 			stmt.setString( index++, dto.getCity() );
 			stmt.setString( index++, dto.getState() );
+			stmt.setString( index++, dto.getZipcode() );
 			stmt.setString( index++, dto.getMaritalStatus() );
+			stmt.setString( index++, dto.getSex() );
+			stmt.setString( index++, dto.getHighestEducationLevel() );
 			stmt.setDate(index++, dto.getBirthDate()==null ? null : new java.sql.Date( dto.getBirthDate().getTime() ) );
 			stmt.setString( index++, dto.getEmergencyContact() );
 			stmt.setString( index++, dto.getEmergencyContactDescription() );
